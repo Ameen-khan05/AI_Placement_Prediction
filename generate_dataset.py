@@ -80,7 +80,7 @@ print(f"Dataset saved to: {file_path}")
 print("\nFirst 5 records:")
 print(df.head())
 
-print("\nPlacement distribution:")
+print("\nPlacement distribution:") 
 print(df["Placement"].value_counts())
 
 print("\nDataset shape:")
