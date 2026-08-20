@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Placement Predictor</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: white;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        h1 {
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #60a5fa;
+        }
+
+        .description {
+            font-size: 19px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 35px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .feature {
+            width: 220px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature h3 {
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 38px;
+            }
+
+            .description {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🎓 AI Placement Predictor</div>
+        <div>Smart • Fast • AI Powered</div>
+    </nav>
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                🤖 Machine Learning Placement Analysis
+            </div>
+
+            <h1>
+                Predict Your
+                <span class="highlight">Placement</span>
+                Potential
+            </h1>
+
+            <p class="description">
+                Analyze your academic performance, skills, attendance,
+                internships and projects using AI to estimate your
+                placement probability.
+            </p>
+
+            <a href="/predict" class="button">
+                Check My Placement
+            </a>
+
+            <div class="features">
+
+                <div class="feature">
+                    <h3>📊 Data Driven</h3>
+                    <p>Uses student performance data for prediction.</p>
+                </div>
+
+                <div class="feature">
+                    <h3>🤖 AI Powered</h3>
+                    <p>Machine learning analyzes your profile.</p>
+                </div>
+
+                <div class="feature">
+                    <h3>⚡ Instant Result</h3>
+                    <p>Get your prediction quickly and easily.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>
