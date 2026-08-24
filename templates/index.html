@@ -3,180 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>AI Placement Predictor</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f172a, #1e3a8a);
-            color: white;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 22px 8%;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .hero {
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .hero-content {
-            max-width: 800px;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.12);
-            padding: 8px 16px;
-            border-radius: 30px;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
-
-        h1 {
-            font-size: 56px;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #60a5fa;
-        }
-
-        .description {
-            font-size: 19px;
-            line-height: 1.6;
-            color: #cbd5e1;
-            margin-bottom: 35px;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 15px 30px;
-            background: #3b82f6;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .button:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-        }
-
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 50px;
-        }
-
-        .feature {
-            width: 220px;
-            padding: 20px;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .feature h3 {
-            margin-bottom: 8px;
-        }
-
-        .feature p {
-            color: #cbd5e1;
-            font-size: 14px;
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 38px;
-            }
-
-            .description {
-                font-size: 16px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <div class="logo">🎓 AI Placement Predictor</div>
-        <div>Smart • Fast • AI Powered</div>
-    </nav>
+<header>
+    <h2>🎓 AI Placement Predictor</h2>
+    <span>Smart • Fast • AI Powered</span>
+</header>
 
-    <section class="hero">
+<section class="hero">
+    <div class="hero-content">
 
-        <div class="hero-content">
+        <div class="badge">🤖 Machine Learning Placement Analysis</div>
 
-            <div class="badge">
-                🤖 Machine Learning Placement Analysis
+        <h1>Predict Your <span>Placement Potential</span></h1>
+
+        <p>
+            Analyze your academic performance, skills, attendance,
+            internships and projects using AI to estimate your
+            placement probability.
+        </p>
+
+        <a href="#prediction" class="button">
+            Check My Placement
+        </a>
+
+        <div class="features">
+            <div class="feature">
+                <h3>📊 Data Driven</h3>
+                <p>Uses student performance data for prediction.</p>
             </div>
 
-            <h1>
-                Predict Your
-                <span class="highlight">Placement</span>
-                Potential
-            </h1>
+            <div class="feature">
+                <h3>🤖 AI Powered</h3>
+                <p>Machine learning analyzes your profile.</p>
+            </div>
 
-            <p class="description">
-                Analyze your academic performance, skills, attendance,
-                internships and projects using AI to estimate your
-                placement probability.
-            </p>
+            <div class="feature">
+                <h3>⚡ Instant Result</h3>
+                <p>Get your prediction quickly and easily.</p>
+            </div>
+        </div>
 
-            <a href="/predict" class="button">
-                Check My Placement
-            </a>
+    </div>
+</section>
 
-            <div class="features">
 
-                <div class="feature">
-                    <h3>📊 Data Driven</h3>
-                    <p>Uses student performance data for prediction.</p>
-                </div>
+<section id="prediction" class="prediction-section">
 
-                <div class="feature">
-                    <h3>🤖 AI Powered</h3>
-                    <p>Machine learning analyzes your profile.</p>
-                </div>
+    <h2>Enter Your Details</h2>
 
-                <div class="feature">
-                    <h3>⚡ Instant Result</h3>
-                    <p>Get your prediction quickly and easily.</p>
-                </div>
+    <form action="/predict" method="POST">
 
+        <div class="form-grid">
+
+            <div>
+                <label>CGPA</label>
+                <input type="number" name="cgpa"
+                       min="0" max="10" step="0.01"
+                       placeholder="Example: 8.2" required>
+            </div>
+
+            <div>
+                <label>Attendance (%)</label>
+                <input type="number" name="attendance"
+                       min="0" max="100" step="0.1"
+                       placeholder="Example: 85" required>
+            </div>
+
+            <div>
+                <label>Skills Score (%)</label>
+                <input type="number" name="skills_score"
+                       min="0" max="100" step="0.1"
+                       placeholder="Example: 80" required>
+            </div>
+
+            <div>
+                <label>Internships</label>
+                <input type="number" name="internships"
+                       min="0" max="10"
+                       placeholder="Example: 1" required>
+            </div>
+
+            <div>
+                <label>Projects</label>
+                <input type="number" name="projects"
+                       min="0" max="20"
+                       placeholder="Example: 3" required>
+            </div>
+
+            <div>
+                <label>Aptitude Score (%)</label>
+                <input type="number" name="aptitude_score"
+                       min="0" max="100" step="0.1"
+                       placeholder="Example: 75" required>
             </div>
 
         </div>
 
-    </section>
+        <button type="submit">🔮 Predict Placement</button>
+
+    </form>
+
+
+    {% if result %}
+
+    <div class="result">
+
+        {% if result.prediction == 1 %}
+
+            <h2>🎉 High Placement Potential!</h2>
+
+            <p class="probability">
+                Placement Probability:
+                <strong>{{ result.placed_probability }}%</strong>
+            </p>
+
+        {% else %}
+
+            <h2>📚 Keep Improving!</h2>
+
+            <p class="probability">
+                Current Placement Probability:
+                <strong>{{ result.placed_probability }}%</strong>
+            </p>
+
+        {% endif %}
+
+        <p>
+            This prediction is based on the information you entered
+            and the trained machine-learning model.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    {% if error %}
+
+    <div class="error">
+        {{ error }}
+    </div>
+
+    {% endif %}
+
+</section>
+{% if result or error %}
+<script>
+    window.onload = function() {
+        document.getElementById("prediction").scrollIntoView({
+            behavior: "smooth"
+        });
+    };
+</script>
+{% endif %}
 
 </body>
 </html>
