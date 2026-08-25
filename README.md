@@ -2,7 +2,14 @@
 
 An AI/ML-based web application that predicts a student's placement status using academic performance, technical skills, internships, projects, and aptitude score. The system also provides placement probability, performance analysis, areas for improvement, practice recommendations, and career guidance.
 
-My live website link:https://ai-placement-prediction-65hm.onrender.com/
+---
+
+## 🌐 Live Deployment
+
+Try the live application: **[AI Placement Prediction](https://ai-placement-prediction-65hm.onrender.com/
+)**
+
+---
 
 📌 Project Overview
 
