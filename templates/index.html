@@ -1,166 +1,467 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>AI Placement Predictor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<header>
-    <h2>🎓 AI Placement Predictor</h2>
-    <span>Smart • Fast • AI Powered</span>
-</header>
+    <!-- ==============================
+         NAVIGATION
+    =============================== -->
 
-<section class="hero">
-    <div class="hero-content">
+    <nav class="navbar">
 
-        <div class="badge">🤖 Machine Learning Placement Analysis</div>
-
-        <h1>Predict Your <span>Placement Potential</span></h1>
-
-        <p>
-            Analyze your academic performance, skills, attendance,
-            internships and projects using AI to estimate your
-            placement probability.
-        </p>
-
-        <a href="#prediction" class="button">
-            Check My Placement
-        </a>
-
-        <div class="features">
-            <div class="feature">
-                <h3>📊 Data Driven</h3>
-                <p>Uses student performance data for prediction.</p>
-            </div>
-
-            <div class="feature">
-                <h3>🤖 AI Powered</h3>
-                <p>Machine learning analyzes your profile.</p>
-            </div>
-
-            <div class="feature">
-                <h3>⚡ Instant Result</h3>
-                <p>Get your prediction quickly and easily.</p>
-            </div>
+        <div class="logo">
+            🎓 AI Placement Predictor
         </div>
 
-    </div>
-</section>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#assessment">Assessment</a>
+        </div>
+
+    </nav>
 
 
-<section id="prediction" class="prediction-section">
+    <!-- ==============================
+         HERO SECTION
+    =============================== -->
 
-    <h2>Enter Your Details</h2>
+    <section class="hero" id="home">
 
-    <form action="/predict" method="POST">
+        <div class="hero-content">
 
-        <div class="form-grid">
+            <p class="tagline">
+                AI-POWERED CAREER INSIGHT
+            </p>
 
-            <div>
-                <label>CGPA</label>
-                <input type="number" name="cgpa"
-                       min="0" max="10" step="0.01"
-                       placeholder="Example: 8.2" required>
-            </div>
+            <h1>
+                Predict Your <span>Placement</span>
+                Potential
+            </h1>
 
-            <div>
-                <label>Attendance (%)</label>
-                <input type="number" name="attendance"
-                       min="0" max="100" step="0.1"
-                       placeholder="Example: 85" required>
-            </div>
+            <p class="hero-text">
+                Analyze your academic performance, skills, internships,
+                projects and aptitude using a machine-learning model.
+                Get a placement prediction and personalized guidance.
+            </p>
 
-            <div>
-                <label>Skills Score (%)</label>
-                <input type="number" name="skills_score"
-                       min="0" max="100" step="0.1"
-                       placeholder="Example: 80" required>
-            </div>
-
-            <div>
-                <label>Internships</label>
-                <input type="number" name="internships"
-                       min="0" max="10"
-                       placeholder="Example: 1" required>
-            </div>
-
-            <div>
-                <label>Projects</label>
-                <input type="number" name="projects"
-                       min="0" max="20"
-                       placeholder="Example: 3" required>
-            </div>
-
-            <div>
-                <label>Aptitude Score (%)</label>
-                <input type="number" name="aptitude_score"
-                       min="0" max="100" step="0.1"
-                       placeholder="Example: 75" required>
-            </div>
+            <a href="#assessment" class="primary-button">
+                Start Assessment →
+            </a>
 
         </div>
 
-        <button type="submit">🔮 Predict Placement</button>
-
-    </form>
+    </section>
 
 
-    {% if result %}
+    <!-- ==============================
+         FEATURES
+    =============================== -->
 
-    <div class="result">
+    <section class="features">
 
-        {% if result.prediction == 1 %}
+        <div class="feature-card">
 
-            <h2>🎉 High Placement Potential!</h2>
+            <div class="feature-icon">
+                🎯
+            </div>
 
-            <p class="probability">
-                Placement Probability:
-                <strong>{{ result.placed_probability }}%</strong>
+            <h3>
+                ML Prediction
+            </h3>
+
+            <p>
+                Get a machine-learning based placement prediction
+                from your profile.
             </p>
 
-        {% else %}
+        </div>
 
-            <h2>📚 Keep Improving!</h2>
 
-            <p class="probability">
-                Current Placement Probability:
-                <strong>{{ result.placed_probability }}%</strong>
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Performance Analysis
+            </h3>
+
+            <p>
+                Understand your strengths and areas that need
+                improvement.
             </p>
 
-        {% endif %}
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🚀
+            </div>
+
+            <h3>
+                Career Guidance
+            </h3>
+
+            <p>
+                Get personalized practice and career recommendations
+                based on your profile.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==============================
+         HOW IT WORKS
+    =============================== -->
+
+    <section class="how-section" id="how-it-works">
+
+        <div class="section-heading">
+
+            <p class="section-label">
+                SIMPLE PROCESS
+            </p>
+
+            <h2>
+                How It Works
+            </h2>
+
+        </div>
+
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Enter Details
+                </h3>
+
+                <p>
+                    Provide your academic, skill and experience
+                    information.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    AI Analysis
+                </h3>
+
+                <p>
+                    The trained machine-learning model analyzes
+                    your profile.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Get Result
+                </h3>
+
+                <p>
+                    Receive your placement prediction, probability
+                    and improvement guidance.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==============================
+         ASSESSMENT
+    =============================== -->
+
+    <section class="assessment-section" id="assessment">
+
+        <div class="section-heading">
+
+            <p class="section-label">
+                STUDENT ASSESSMENT
+            </p>
+
+            <h2>
+                Enter Your Details
+            </h2>
+
+            <p>
+                Provide accurate information for a better prediction.
+            </p>
+
+        </div>
+
+
+        <div class="form-container">
+
+            {% if error %}
+
+            <div class="error-message">
+                ⚠️ {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <form action="/predict" method="POST">
+
+
+                <!-- CGPA -->
+
+                <div class="form-group">
+
+                    <label for="cgpa">
+                        CGPA
+                    </label>
+
+                    <input
+                        type="number"
+                        id="cgpa"
+                        name="cgpa"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        placeholder="Example: 8.2"
+                        required
+                    >
+
+                    <small>
+                        Enter your CGPA out of 10
+                    </small>
+
+                </div>
+
+
+                <!-- ATTENDANCE -->
+
+                <div class="form-group">
+
+                    <label for="attendance">
+                        Attendance (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="attendance"
+                        name="attendance"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        placeholder="Example: 85"
+                        required
+                    >
+
+                    <small>
+                        Enter your attendance percentage
+                    </small>
+
+                </div>
+
+
+                <!-- SKILLS -->
+
+                <div class="form-group">
+
+                    <label for="skills_score">
+                        Skills Score (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="skills_score"
+                        name="skills_score"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        placeholder="Example: 78"
+                        required
+                    >
+
+                    <small>
+                        Rate your overall technical skills
+                    </small>
+
+                </div>
+
+
+                <!-- INTERNSHIPS -->
+
+                <div class="form-group">
+
+                    <label for="internships">
+                        Number of Internships
+                    </label>
+
+                    <input
+                        type="number"
+                        id="internships"
+                        name="internships"
+                        min="0"
+                        step="1"
+                        placeholder="Example: 2"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PROJECTS -->
+
+                <div class="form-group">
+
+                    <label for="projects">
+                        Number of Projects
+                    </label>
+
+                    <input
+                        type="number"
+                        id="projects"
+                        name="projects"
+                        min="0"
+                        step="1"
+                        placeholder="Example: 3"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- APTITUDE -->
+
+                <div class="form-group">
+
+                    <label for="aptitude_score">
+                        Aptitude Score (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="aptitude_score"
+                        name="aptitude_score"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        placeholder="Example: 80"
+                        required
+                    >
+
+                    <small>
+                        Enter your aptitude test score
+                    </small>
+
+                </div>
+
+
+                <!-- CAREER ROLE -->
+
+                <div class="form-group">
+
+                    <label for="career_role">
+                        Interested Career Role
+                    </label>
+
+                    <select
+                        id="career_role"
+                        name="career_role"
+                    >
+
+                        <option value="Software Developer">
+                            Software Developer
+                        </option>
+
+                        <option value="Web Developer">
+                            Web Developer
+                        </option>
+
+                        <option value="Data Analyst">
+                            Data Analyst
+                        </option>
+
+                        <option value="Data Scientist">
+                            Data Scientist
+                        </option>
+
+                        <option value="Machine Learning Engineer">
+                            Machine Learning Engineer
+                        </option>
+
+                        <option value="QA Engineer">
+                            QA Engineer
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="predict-button"
+                >
+                    🔮 Predict Placement
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==============================
+         FOOTER
+    =============================== -->
+
+    <footer>
 
         <p>
-            This prediction is based on the information you entered
-            and the trained machine-learning model.
+            AI Placement Predictor
         </p>
 
-    </div>
+        <p>
+            Machine Learning Based Student Placement Analysis
+        </p>
 
-    {% endif %}
-
-
-    {% if error %}
-
-    <div class="error">
-        {{ error }}
-    </div>
-
-    {% endif %}
-
-</section>
-{% if result or error %}
-<script>
-    window.onload = function() {
-        document.getElementById("prediction").scrollIntoView({
-            behavior: "smooth"
-        });
-    };
-</script>
-{% endif %}
+    </footer>
 
 </body>
+
 </html>
