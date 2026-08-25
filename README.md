@@ -1,5 +1,7 @@
 # AI Placement Prediction
 
+My live website link:https://ai-placement-prediction-65hm.onrender.com/
+
 ## 📌 Project Description
 
 This project uses Machine Learning to predict whether a student is likely to be placed based on their academic performance, skills, internships, projects, backlogs, and other placement-related factors.
