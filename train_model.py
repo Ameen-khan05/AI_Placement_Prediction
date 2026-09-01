@@ -8,48 +8,129 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 
-# Create sample placement dataset
+# ==========================================
+# CREATE TRAINING DATA
+# ==========================================
+
 np.random.seed(42)
 
 n = 1000
 
-cgpa = np.round(np.random.uniform(5.0, 10.0, n), 2)
-attendance = np.round(np.random.uniform(50, 100, n), 2)
-skills_score = np.round(np.random.uniform(30, 100, n), 2)
-internships = np.random.randint(0, 4, n)
-projects = np.random.randint(0, 5, n)
-aptitude_score = np.round(np.random.uniform(30, 100, n), 2)
+cgpa = np.round(
+    np.random.uniform(5.0, 10.0, n),
+    2
+)
+
+internships = np.random.randint(
+    0, 4, n
+)
+
+projects = np.random.randint(
+    0, 5, n
+)
+
+aptitude_score = np.round(
+    np.random.uniform(30, 100, n),
+    2
+)
 
 
-# Calculate a placement score
+# ==========================================
+# SUPPORTED TECHNICAL SKILLS
+# ==========================================
+
+skills_list = [
+    "Python",
+    "Java",
+    "C",
+    "C++",
+    "SQL",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "React",
+    "Django",
+    "Flask",
+    "Machine Learning",
+    "Data Science",
+    "Git",
+    "Excel"
+]
+
+
+# ==========================================
+# GENERATE SKILL DATA
+# ==========================================
+
+skill_data = {}
+
+for skill in skills_list:
+
+    skill_data[skill] = np.random.randint(
+        0,
+        2,
+        n
+    )
+
+
+# ==========================================
+# CALCULATE PLACEMENT SCORE
+# ==========================================
+
+skill_score = sum(
+    skill_data[skill]
+    for skill in skills_list
+)
+
 score = (
     cgpa * 10
-    + attendance * 0.25
-    + skills_score * 0.30
-    + internships * 8
-    + projects * 5
-    + aptitude_score * 0.20
+    + internships * 10
+    + projects * 7
+    + aptitude_score * 0.25
+    + skill_score * 3
 )
+
 
 threshold = np.median(score)
 
-placed = (score >= threshold).astype(int)
+placed = (
+    score >= threshold
+).astype(int)
 
 
-# Create DataFrame
+# ==========================================
+# CREATE DATAFRAME
+# ==========================================
+
 data = pd.DataFrame({
+
     "cgpa": cgpa,
-    "attendance": attendance,
-    "skills_score": skills_score,
+
     "internships": internships,
+
     "projects": projects,
+
     "aptitude_score": aptitude_score,
+
     "placed": placed
 })
 
 
-# Save dataset
-os.makedirs("data", exist_ok=True)
+# Add skill columns
+
+for skill in skills_list:
+
+    data[skill] = skill_data[skill]
+
+
+# ==========================================
+# SAVE DATASET
+# ==========================================
+
+os.makedirs(
+    "data",
+    exist_ok=True
+)
 
 data.to_csv(
     "data/placement_data.csv",
@@ -57,41 +138,66 @@ data.to_csv(
 )
 
 
-# Features and target
+# ==========================================
+# FEATURES
+# ==========================================
+
 features = [
     "cgpa",
-    "attendance",
-    "skills_score",
     "internships",
     "projects",
     "aptitude_score"
 ]
 
+features.extend(skills_list)
+
+
 X = data[features]
+
 y = data["placed"]
 
 
-# Split dataset
+# ==========================================
+# SPLIT DATA
+# ==========================================
+
 X_train, X_test, y_train, y_test = train_test_split(
+
     X,
     y,
+
     test_size=0.2,
+
     random_state=42,
+
     stratify=y
 )
 
 
-# Create and train model
+# ==========================================
+# TRAIN MODEL
+# ==========================================
+
 model = RandomForestClassifier(
+
     n_estimators=200,
+
     random_state=42
 )
 
-model.fit(X_train, y_train)
+model.fit(
+    X_train,
+    y_train
+)
 
 
-# Evaluate model
-predictions = model.predict(X_test)
+# ==========================================
+# EVALUATE MODEL
+# ==========================================
+
+predictions = model.predict(
+    X_test
+)
 
 accuracy = accuracy_score(
     y_test,
@@ -102,13 +208,25 @@ accuracy = accuracy_score(
 print("--------------------------------")
 print("MODEL TRAINING COMPLETE")
 print("--------------------------------")
-print("Accuracy:", round(accuracy * 100, 2), "%")
+
+print(
+    "Accuracy:",
+    round(accuracy * 100, 2),
+    "%"
+)
 
 
-# Save model
+# ==========================================
+# SAVE MODEL
+# ==========================================
+
 model_data = {
+
     "model": model,
-    "features": features
+
+    "features": features,
+
+    "skills": skills_list
 }
 
 joblib.dump(
@@ -116,5 +234,17 @@ joblib.dump(
     "model.pkl"
 )
 
+
 print("Model saved as model.pkl")
-print("Dataset saved as data/placement_data.csv")
+
+print(
+    "Dataset saved as data/placement_data.csv"
+)
+
+print(
+    "Available training skills:"
+)
+
+print(
+    ", ".join(skills_list)
+)
