@@ -11,42 +11,6 @@ model = model_data["model"]
 
 features = model_data["features"]
 
-skills_list = model_data["skills"]
-
-
-# ==========================================
-# PROCESS STUDENT SKILLS
-# ==========================================
-
-def process_skills(skills_text):
-
-    """
-    Converts the student's typed skills into
-    the skill features used by the ML model.
-    """
-
-    # Create all skills as 0 initially
-    skill_values = {
-        skill: 0
-        for skill in skills_list
-    }
-
-    if not skills_text:
-        return skill_values
-
-    # Convert input to lowercase
-    text = skills_text.lower()
-
-    # Check every supported skill
-    for skill in skills_list:
-
-        skill_lower = skill.lower()
-
-        if skill_lower in text:
-            skill_values[skill] = 1
-
-    return skill_values
-
 
 # ==========================================
 # PREDICT PLACEMENT
@@ -54,41 +18,40 @@ def process_skills(skills_text):
 
 def predict_placement(student_data):
 
-    # --------------------------------------
-    # Process technical skills
-    # --------------------------------------
-
-    skill_values = process_skills(
-        student_data.get("technical_skills", "")
+    # Get student's technical skills
+    technical_skills = student_data.get(
+        "technical_skills",
+        []
     )
 
+    # Count the number of skills
+    technical_skill_score = len(
+        technical_skills
+    )
+
+    # Maximum skills used during model training
+    technical_skill_score = min(
+        technical_skill_score,
+        13
+    )
 
     # --------------------------------------
-    # Create values for ML model
+    # Prepare values for ML model
     # --------------------------------------
 
     values = [[
         student_data["cgpa"],
         student_data["internships"],
         student_data["projects"],
-        student_data["aptitude_score"]
+        student_data["aptitude_score"],
+        technical_skill_score
     ]]
 
-
-    # Add technical skill values
-    for skill in skills_list:
-
-        values[0].append(
-            skill_values[skill]
-        )
-
-
     # --------------------------------------
-    # Make prediction
+    # Prediction
     # --------------------------------------
 
     prediction = model.predict(values)[0]
-
 
     # --------------------------------------
     # Prediction probability
@@ -96,10 +59,9 @@ def predict_placement(student_data):
 
     probabilities = model.predict_proba(values)[0]
 
-    not_placed_probability = probabilities[0] * 100
-
     placed_probability = probabilities[1] * 100
 
+    not_placed_probability = probabilities[0] * 100
 
     # --------------------------------------
     # Return result
@@ -117,5 +79,9 @@ def predict_placement(student_data):
         "not_placed_probability": round(
             not_placed_probability,
             2
-        )
+        ),
+
+        "technical_skill_score":
+            technical_skill_score
+
     }

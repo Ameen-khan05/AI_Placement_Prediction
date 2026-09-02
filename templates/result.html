@@ -1,651 +1,603 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Placement Prediction Result</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <title>
+        Placement Prediction Result
+    </title>
+
 
     <style>
-        /* =====================================
-           RESULT PAGE
-        ===================================== */
 
-        .result-page {
-            min-height: 100vh;
-            padding: 70px 20px;
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background:
-                radial-gradient(circle at top right, #dbeafe, transparent 35%),
-                radial-gradient(circle at bottom left, #e0e7ff, transparent 35%),
-                #f5f7fb;
+                linear-gradient(
+                    135deg,
+                    #eef4ff,
+                    #ffffff
+                );
+
+            color: #222;
         }
 
-        .result-container {
-            max-width: 1050px;
-            margin: auto;
-        }
 
-        .result-card {
-            background: white;
-            border-radius: 24px;
-            padding: 55px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10);
-        }
+        .navbar {
 
-        .result-icon {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
             display: flex;
+
+            justify-content: space-between;
+
             align-items: center;
-            justify-content: center;
-            font-size: 42px;
-            background: #ecfdf5;
+
+            padding: 22px 8%;
+
+            background: white;
+
+            border-bottom: 1px solid #eee;
         }
 
-        .result-label {
-            color: #2563eb;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            color: #1769e0;
         }
 
-        .result-title {
-            font-size: 52px;
-            margin-bottom: 15px;
-            font-weight: 800;
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 30px;
         }
 
-        .placed {
-            color: #15803d;
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: #333;
         }
 
-        .not-placed {
-            color: #dc2626;
+
+        .container {
+
+            max-width: 900px;
+
+            margin: 40px auto;
+
+            padding: 20px;
         }
 
-        .result-description {
-            max-width: 700px;
-            margin: auto;
-            color: #667085;
-            font-size: 17px;
-        }
 
-        .probability-box {
-            max-width: 420px;
-            margin: 35px auto 0;
-            padding: 25px;
+        .card {
+
+            background: white;
+
+            padding: 35px;
+
             border-radius: 18px;
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,0.08);
+
+            margin-bottom: 20px;
         }
 
-        .probability-label {
-            color: #667085;
-            font-size: 15px;
-            margin-bottom: 5px;
+
+        .result {
+
+            text-align: center;
         }
+
+
+        .result h1 {
+
+            font-size: 42px;
+
+            margin-bottom: 10px;
+
+            color:
+                {% if result == "PLACED" %}
+                #16823b
+                {% else %}
+                #d62828
+                {% endif %};
+        }
+
 
         .probability {
-            font-size: 48px;
-            font-weight: 800;
-            color: #2563eb;
+
+            font-size: 35px;
+
+            font-weight: bold;
+
+            color: #1769e0;
+
+            margin: 15px 0;
         }
 
-        /* =====================================
-           PROFILE
-        ===================================== */
 
-        .profile-section {
+        .section {
+
             margin-top: 30px;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.07);
         }
 
-        .section-title {
-            text-align: center;
-            font-size: 30px;
-            margin-bottom: 30px;
-            color: #111827;
+
+        .section h2 {
+
+            color: #1769e0;
+
+            font-size: 21px;
+
+            margin-bottom: 12px;
         }
 
-        .profile-grid {
+
+        .profile {
+
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(150px, 1fr)
+                );
+
+            gap: 12px;
         }
+
 
         .profile-item {
-            padding: 25px 15px;
-            text-align: center;
-            background: #f8fafc;
-            border-radius: 15px;
-            border: 1px solid #edf0f5;
+
+            padding: 15px;
+
+            border: 1px solid #eee;
+
+            border-radius: 10px;
+
+            background: #fafafa;
         }
 
-        .profile-item span {
-            display: block;
-            color: #667085;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
 
         .profile-item strong {
-            font-size: 25px;
-            color: #2563eb;
+
+            display: block;
+
+            color: #1769e0;
+
+            font-size: 20px;
+
+            margin-top: 5px;
         }
 
-        /* =====================================
-           ANALYSIS GRID
-        ===================================== */
 
-        .analysis-grid {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
+        .skills {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
         }
 
-        .analysis-card {
-            background: white;
+
+        .skill {
+
+            background: #eef4ff;
+
+            color: #1769e0;
+
+            padding: 8px 12px;
+
             border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.07);
+
+            font-size: 14px;
+
+            font-weight: 500;
         }
 
-        .analysis-card h3 {
-            font-size: 21px;
-            margin-bottom: 20px;
-        }
 
-        .analysis-card ul {
+        ul {
+
+            line-height: 1.9;
+
             padding-left: 20px;
-            margin: 0;
         }
 
-        .analysis-card li {
-            margin-bottom: 12px;
-            color: #4b5563;
-        }
 
-        .strength-card {
-            border-top: 5px solid #16a34a;
-        }
+        .career {
 
-        .weakness-card {
-            border-top: 5px solid #f59e0b;
-        }
+            font-size: 20px;
 
-        .practice-card {
-            border-top: 5px solid #2563eb;
-        }
+            font-weight: bold;
 
-        .career-card {
-            border-top: 5px solid #7c3aed;
-        }
+            padding: 15px;
 
-        .interview-card {
-            border-top: 5px solid #0891b2;
-        }
+            background: #eef4ff;
 
-        /* =====================================
-           CAREER ROLE
-        ===================================== */
-
-        .career-role {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 18px;
-            border-radius: 30px;
-            background: #f3e8ff;
-            color: #7c3aed;
-            font-weight: 700;
-        }
-
-        /* =====================================
-           BUTTONS
-        ===================================== */
-
-        .result-actions {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .new-assessment-button {
-            display: inline-block;
-            padding: 15px 28px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
             border-radius: 10px;
-            font-weight: 600;
-            transition: 0.3s;
+
+            color: #1769e0;
         }
 
-        .new-assessment-button:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
+
+        .button {
+
+            display: inline-block;
+
+            padding: 13px 22px;
+
+            background: #1769e0;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 9px;
+
+            margin-top: 15px;
         }
 
-        /* =====================================
-           DISCLAIMER
-        ===================================== */
 
-        .disclaimer {
-            text-align: center;
-            margin-top: 30px;
-            color: #8a94a6;
+        .note {
+
+            color: #777;
+
             font-size: 13px;
+
+            margin-top: 25px;
+
+            text-align: center;
         }
 
-        /* =====================================
-           MOBILE
-        ===================================== */
-
-        @media (max-width: 850px) {
-
-            .profile-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .analysis-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .result-card {
-                padding: 40px 25px;
-            }
-
-            .result-title {
-                font-size: 42px;
-            }
-        }
-
-        @media (max-width: 500px) {
-
-            .profile-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-
-            .profile-section {
-                padding: 25px 15px;
-            }
-
-            .analysis-card {
-                padding: 25px;
-            }
-
-            .result-title {
-                font-size: 35px;
-            }
-
-            .probability {
-                font-size: 40px;
-            }
-        }
     </style>
 
 </head>
 
+
 <body>
 
-    <!-- =====================================
-         NAVIGATION
-    ====================================== -->
 
-    <nav class="navbar">
+    <div class="navbar">
 
         <div class="logo">
+
             🎓 AI Placement Predictor
+
         </div>
+
 
         <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/">New Assessment</a>
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/">
+                New Assessment
+            </a>
+
         </div>
 
-    </nav>
+    </div>
 
 
-    <!-- =====================================
-         RESULT PAGE
-    ====================================== -->
-
-    <main class="result-page">
-
-        <div class="result-container">
+    <div class="container">
 
 
-            <!-- =================================
-                 MAIN RESULT
-            ================================== -->
+        <!-- RESULT -->
 
-            <div class="result-card">
+        <div class="card result">
 
-                <div class="result-icon">
+            <h1>
 
-                    {% if result.prediction == 1 %}
-                        ✓
-                    {% else %}
-                        !
-                    {% endif %}
+                {{ result }}
+
+            </h1>
+
+
+            <p>
+
+                Estimated Placement Probability
+
+            </p>
+
+
+            <div class="probability">
+
+                {{ probability }}%
+
+            </div>
+
+
+            <p>
+
+                The prediction is generated
+                using the machine-learning model
+                based on your academic performance,
+                projects, internships, aptitude and
+                technical skills.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- PROFILE -->
+
+        <div class="card">
+
+
+            <div class="section">
+
+                <h2>
+                    📊 Performance Analysis
+                </h2>
+
+
+                <div class="profile">
+
+
+                    <div class="profile-item">
+
+                        CGPA
+
+                        <strong>
+                            {{ cgpa }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-item">
+
+                        Internships
+
+                        <strong>
+                            {{ internships }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-item">
+
+                        Projects
+
+                        <strong>
+                            {{ projects }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-item">
+
+                        Aptitude
+
+                        <strong>
+                            {{ aptitude_score }}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-item">
+
+                        Technical Skills
+
+                        <strong>
+                            {{ skills_score }}%
+                        </strong>
+
+                    </div>
+
 
                 </div>
 
-
-                <p class="result-label">
-                    MODEL PREDICTION
-                </p>
+            </div>
 
 
-                {% if result.prediction == 1 %}
 
-                    <h1 class="result-title placed">
-                        PLACED
-                    </h1>
+            <!-- SKILLS -->
 
-                    <p class="result-description">
-                        The model predicts that you are likely to be placed
-                        based on the information provided.
-                    </p>
+            <div class="section">
 
-                {% else %}
+                <h2>
+                    💻 Your Technical Skills
+                </h2>
 
-                    <h1 class="result-title not-placed">
-                        NOT PLACED
-                    </h1>
 
-                    <p class="result-description">
-                        The model predicts that you may need to improve
-                        your profile for better placement chances.
+                {% if selected_skills %}
+
+                    <div class="skills">
+
+                        {% for skill in selected_skills %}
+
+                            <span class="skill">
+
+                                {{ skill }}
+
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if custom_skills %}
+
+                    <p>
+
+                        <strong>
+                            Additional Skills:
+                        </strong>
+
+                        {{ custom_skills }}
+
                     </p>
 
                 {% endif %}
 
 
-                <!-- Probability -->
+                {% if not selected_skills and not custom_skills %}
 
-                <div class="probability-box">
+                    <p>
+                        No technical skills entered.
+                    </p>
 
-                    <div class="probability-label">
-                        Placement Probability
-                    </div>
-
-                    <div class="probability">
-                        {{ result.placed_probability }}%
-                    </div>
-
-                </div>
+                {% endif %}
 
             </div>
 
 
-            <!-- =================================
-                 STUDENT PROFILE
-            ================================== -->
 
-            <div class="profile-section">
+            <!-- CAREER -->
 
-                <h2 class="section-title">
-                    Your Profile
+            <div class="section">
+
+                <h2>
+                    🎯 Interested Career Role
                 </h2>
 
 
-                <div class="profile-grid">
+                <div class="career">
 
-
-                    <!-- CGPA -->
-
-                    <div class="profile-item">
-
-                        <span>
-                            CGPA
-                        </span>
-
-                        <strong>
-                            {{ student.cgpa }}
-                        </strong>
-
-                    </div>
-
-
-                    <!-- INTERNSHIPS -->
-
-                    <div class="profile-item">
-
-                        <span>
-                            Internships
-                        </span>
-
-                        <strong>
-                            {{ student.internships }}
-                        </strong>
-
-                    </div>
-
-
-                    <!-- PROJECTS -->
-
-                    <div class="profile-item">
-
-                        <span>
-                            Projects
-                        </span>
-
-                        <strong>
-                            {{ student.projects }}
-                        </strong>
-
-                    </div>
-
-
-                    <!-- APTITUDE -->
-
-                    <div class="profile-item">
-
-                        <span>
-                            Aptitude
-                        </span>
-
-                        <strong>
-                            {{ student.aptitude_score }}%
-                        </strong>
-
-                    </div>
-
+                    {{ career_role }}
 
                 </div>
 
             </div>
 
 
-            <!-- =================================
-                 PERFORMANCE ANALYSIS
-            ================================== -->
 
-            <div class="profile-section">
+            <!-- STRENGTHS -->
 
-                <h2 class="section-title">
-                    Performance Analysis
+            <div class="section">
+
+                <h2>
+                    💪 Your Strengths
                 </h2>
 
 
-                <div class="analysis-grid">
+                <ul>
 
+                    {% for item in strengths %}
 
-                    <!-- STRENGTHS -->
+                        <li>
+                            {{ item }}
+                        </li>
 
-                    <div class="analysis-card strength-card">
+                    {% endfor %}
 
-                        <h3>
-                            💪 Your Strengths
-                        </h3>
-
-                        <ul>
-
-                            {% for item in strengths %}
-
-                            <li>
-                                {{ item }}
-                            </li>
-
-                            {% endfor %}
-
-                        </ul>
-
-                    </div>
-
-
-                    <!-- AREAS TO IMPROVE -->
-
-                    <div class="analysis-card weakness-card">
-
-                        <h3>
-                            📈 Areas to Improve
-                        </h3>
-
-                        <ul>
-
-                            {% for item in weak_areas %}
-
-                            <li>
-                                {{ item }}
-                            </li>
-
-                            {% endfor %}
-
-                        </ul>
-
-                    </div>
-
-
-                    <!-- PRACTICE -->
-
-                    <div class="analysis-card practice-card">
-
-                        <h3>
-                            📚 Practice Recommendations
-                        </h3>
-
-                        <ul>
-
-                            {% for item in practice %}
-
-                            <li>
-                                {{ item }}
-                            </li>
-
-                            {% endfor %}
-
-                        </ul>
-
-                    </div>
-
-
-                    <!-- CAREER -->
-
-                    <div class="analysis-card career-card">
-
-                        <h3>
-                            🚀 Career Guidance
-                        </h3>
-
-                        <div class="career-role">
-                            {{ career_role }}
-                        </div>
-
-                        <ul>
-
-                            {% for item in role_suggestions %}
-
-                            <li>
-                                {{ item }}
-                            </li>
-
-                            {% endfor %}
-
-                        </ul>
-
-                    </div>
-
-
-                    <!-- INTERVIEW -->
-
-                    <div class="analysis-card interview-card">
-
-                        <h3>
-                            🎯 Interview Preparation
-                        </h3>
-
-                        <ul>
-
-                            {% for item in interview_tips %}
-
-                            <li>
-                                {{ item }}
-                            </li>
-
-                            {% endfor %}
-
-                        </ul>
-
-                    </div>
-
-
-                </div>
+                </ul>
 
             </div>
 
 
-            <!-- =================================
-                 FINAL ACTION
-            ================================== -->
 
-            <div class="result-actions">
+            <!-- IMPROVEMENTS -->
 
-                <a href="/" class="new-assessment-button">
-                    🔄 Start New Assessment
+            <div class="section">
+
+                <h2>
+                    📈 Areas to Improve
+                </h2>
+
+
+                <ul>
+
+                    {% for item in improvements %}
+
+                        <li>
+                            {{ item }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- RECOMMENDATIONS -->
+
+            <div class="section">
+
+                <h2>
+                    🚀 Practice Recommendations
+                </h2>
+
+
+                <ul>
+
+                    {% for item in recommendations %}
+
+                        <li>
+                            {{ item }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+            <div style="text-align:center;">
+
+                <a
+                    href="/"
+                    class="button"
+                >
+                    New Assessment
                 </a>
 
             </div>
 
 
-            <p class="disclaimer">
-                This prediction is an estimate generated by the
-                machine-learning model and is not a guarantee of actual placement.
-            </p>
+            <div class="note">
+
+                This prediction is an estimate generated
+                by the machine-learning model and does
+                not guarantee actual placement.
+
+            </div>
 
 
         </div>
 
-    </main>
+    </div>
 
-
-    <!-- =====================================
-         FOOTER
-    ====================================== -->
-
-    <footer>
-
-        <p>
-            AI Placement Predictor
-        </p>
-
-        <p>
-            Machine Learning Based Student Placement Analysis
-        </p>
-
-    </footer>
 
 </body>
 

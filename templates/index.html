@@ -1,92 +1,835 @@
-<!-- YOUR TECHNICAL SKILLS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div class="form-group">
+    <title>AI Placement Predictor</title>
 
-    <label>
-        Your Technical Skills
-    </label>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <small>
-        Select all the skills you have
-    </small>
+        html {
+            scroll-behavior: smooth;
+        }
 
-    <div class="skills-container">
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fc;
+            color: #172033;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="Python">
-            Python
-        </label>
+        /* ================= NAVBAR ================= */
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="Java">
-            Java
-        </label>
+        .navbar {
+            height: 80px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="C">
-            C
-        </label>
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #172033;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="C++">
-            C++
-        </label>
+        .logo span {
+            color: #5b3df5;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="HTML">
-            HTML
-        </label>
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="CSS">
-            CSS
-        </label>
+        .nav-links a {
+            text-decoration: none;
+            color: #172033;
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="JavaScript">
-            JavaScript
-        </label>
+        .nav-links a:hover {
+            color: #5b3df5;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="SQL">
-            SQL
-        </label>
+        /* ================= HOME ================= */
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="React">
-            React
-        </label>
+        #home {
+            min-height: calc(100vh - 80px);
+            padding: 90px 7% 70px;
+            text-align: center;
+            background: linear-gradient(135deg, #f3f5ff, #ffffff);
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="Django">
-            Django
-        </label>
+        .hero-small {
+            color: #5b3df5;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="Flask">
-            Flask
-        </label>
+        .hero-title {
+            font-size: clamp(45px, 7vw, 76px);
+            line-height: 1.05;
+            max-width: 900px;
+            margin: auto;
+            font-weight: 800;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="Machine Learning">
-            Machine Learning
-        </label>
+        .hero-title span {
+            color: #5b3df5;
+        }
 
-        <label class="skill-option">
-            <input type="checkbox" name="technical_skills" value="Data Science">
-            Data Science
-        </label>
+        .hero-description {
+            max-width: 750px;
+            margin: 28px auto;
+            font-size: 19px;
+            line-height: 1.7;
+            color: #697386;
+        }
+
+        .start-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 17px 32px;
+            border-radius: 10px;
+            background: #5b3df5;
+            color: white;
+            border: none;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(91, 61, 245, 0.25);
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            background: #4930d4;
+        }
+
+        /* ================= FEATURE CARDS ================= */
+
+        .features {
+            max-width: 1100px;
+            margin: 70px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 35px 30px;
+            border-radius: 18px;
+            text-align: left;
+            box-shadow: 0 12px 35px rgba(30, 40, 80, 0.08);
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .feature-icon {
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #747d8f;
+            line-height: 1.6;
+        }
+
+        /* ================= HOW IT WORKS ================= */
+
+        .how-section {
+            max-width: 1100px;
+            margin: 100px auto 0;
+        }
+
+        .section-label {
+            color: #5b3df5;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: 3px;
+            font-size: 13px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 40px;
+            margin: 15px 0 45px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .step {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(30, 40, 80, 0.06);
+        }
+
+        .step-number {
+            font-size: 35px;
+            font-weight: 800;
+            color: #5b3df5;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #747d8f;
+            line-height: 1.6;
+        }
+
+        /* ================= ASSESSMENT ================= */
+
+        #assessment {
+            display: none;
+            min-height: 100vh;
+            padding: 70px 20px;
+            background: #f7f8fc;
+        }
+
+        .assessment-container {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 45px;
+            border-radius: 22px;
+            box-shadow: 0 15px 45px rgba(30, 40, 80, 0.10);
+        }
+
+        .assessment-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .assessment-header h1 {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .assessment-header p {
+            color: #747d8f;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-group > label {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .form-help {
+            display: block;
+            color: #7b8494;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dfe3eb;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            border-color: #5b3df5;
+            box-shadow: 0 0 0 3px rgba(91, 61, 245, 0.08);
+        }
+
+        /* ================= SKILLS ================= */
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .skill-option {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 13px 14px;
+            border: 1px solid #e0e3eb;
+            border-radius: 9px;
+            cursor: pointer;
+            background: #fafbff;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .skill-option:hover {
+            border-color: #5b3df5;
+            background: #f4f1ff;
+        }
+
+        .skill-option input {
+            width: 17px;
+            height: 17px;
+            accent-color: #5b3df5;
+            cursor: pointer;
+        }
+
+        .custom-skills {
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #5b3df5;
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #4930d4;
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #5b3df5;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            background: white;
+            color: #7b8494;
+            border-top: 1px solid #eee;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                gap: 15px;
+                font-size: 13px;
+            }
+
+            #home {
+                padding: 65px 5%;
+            }
+
+            .features,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .assessment-container {
+                padding: 28px 20px;
+            }
+
+            .assessment-header h1 {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVIGATION BAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🎓 AI Placement <span>Predictor</span>
+    </div>
+
+    <div class="nav-links">
+        <a onclick="showHome()">Home</a>
+        <a onclick="showHowItWorks()">How It Works</a>
+        <a onclick="startAssessment()">Assessment</a>
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     HOME / LANDING PAGE
+===================================================== -->
+
+<section id="home">
+
+    <div class="hero-small">
+        AI-POWERED CAREER INSIGHT
+    </div>
+
+    <h1 class="hero-title">
+        Predict Your <span>Placement</span> Potential
+    </h1>
+
+    <p class="hero-description">
+        Analyze your academic performance, technical skills,
+        internships, projects and aptitude using a machine-learning
+        model. Get a placement prediction and personalized career guidance.
+    </p>
+
+    <a href="/assessment" class="start-btn">
+    Start Assessment →
+</a>
+
+
+    <!-- FEATURES -->
+
+    <div class="features">
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🎯
+            </div>
+
+            <h3>
+                ML Prediction
+            </h3>
+
+            <p>
+                Get a machine-learning based placement prediction
+                based on your student profile.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Performance Analysis
+            </h3>
+
+            <p>
+                Understand your strengths and identify areas
+                that need improvement.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🚀
+            </div>
+
+            <h3>
+                Career Guidance
+            </h3>
+
+            <p>
+                Get personalized practice and career recommendations
+                based on your profile.
+            </p>
+
+        </div>
 
     </div>
 
-    <input
-        type="text"
-        name="custom_skills"
-        placeholder="Or enter other skills (e.g. Git, Node.js, PHP)"
-    >
 
-    <small>
-        You can select multiple skills and enter additional skills above.
-    </small>
+    <!-- HOW IT WORKS -->
 
-</div>
+    <div class="how-section" id="how">
+
+        <div class="section-label">
+            SIMPLE PROCESS
+        </div>
+
+        <h2 class="section-title">
+            How It Works
+        </h2>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Enter Details
+                </h3>
+
+                <p>
+                    Provide your academic, technical skill
+                    and experience information.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    AI Analysis
+                </h3>
+
+                <p>
+                    The trained machine-learning model analyzes
+                    your profile.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Get Result
+                </h3>
+
+                <p>
+                    Receive your placement prediction,
+                    probability and improvement guidance.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STUDENT ASSESSMENT PAGE
+===================================================== -->
+
+<section id="assessment">
+
+    <div class="assessment-container">
+
+        <div class="assessment-header">
+
+            <div class="section-label">
+                STUDENT ASSESSMENT
+            </div>
+
+            <h1>
+                Tell Us About Yourself
+            </h1>
+
+            <p>
+                Enter your academic performance, experience,
+                aptitude and technical skills.
+            </p>
+
+        </div>
+
+
+        <!-- IMPORTANT:
+             Form sends data to /predict
+        -->
+
+        <form action="/predict" method="POST">
+
+
+            <!-- ================= CGPA ================= -->
+
+            <div class="form-group">
+
+                <label for="cgpa">
+                    CGPA
+                </label>
+
+                <span class="form-help">
+                    Enter your CGPA out of 10
+                </span>
+
+                <input
+                    type="number"
+                    id="cgpa"
+                    name="cgpa"
+                    min="0"
+                    max="10"
+                    step="0.01"
+                    placeholder="Example: 7.8"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ================= INTERNSHIPS ================= -->
+
+            <div class="form-group">
+
+                <label for="internships">
+                    Number of Internships
+                </label>
+
+                <span class="form-help">
+                    Enter the number of internships you have completed
+                </span>
+
+                <input
+                    type="number"
+                    id="internships"
+                    name="internships"
+                    min="0"
+                    max="20"
+                    placeholder="Example: 2"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ================= PROJECTS ================= -->
+
+            <div class="form-group">
+
+                <label for="projects">
+                    Number of Projects
+                </label>
+
+                <span class="form-help">
+                    Enter the number of academic or personal projects
+                </span>
+
+                <input
+                    type="number"
+                    id="projects"
+                    name="projects"
+                    min="0"
+                    max="50"
+                    placeholder="Example: 3"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ================= APTITUDE ================= -->
+
+            <div class="form-group">
+
+                <label for="aptitude_score">
+                    Aptitude Score
+                </label>
+
+                <span class="form-help">
+                    Enter your aptitude score from 0 to 100
+                </span>
+
+                <input
+                    type="number"
+                    id="aptitude_score"
+                    name="aptitude_score"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    placeholder="Example: 75"
+                    required
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 YOUR TECHNICAL SKILLS
+            ================================================== -->
+
+            <div class="form-group">
+
+                <label>
+                    Your Technical Skills
+                </label>
+
+                <span class="form-help">
+                    Select all the technical skills you have.
+                    You can select multiple skills.
+                </span>
+
+
+                <div class="skills-container">
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="Python"
+                        >
+                        Python
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="Java"
+                        >
+                        Java
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="C"
+                        >
+                        C
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="C++"
+                        >
+                        C++
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="HTML"
+                        >
+                        HTML
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="CSS"
+                        >
+                        CSS
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="JavaScript"
+                        >
+                        JavaScript
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="SQL"
+                        >
+                        SQL
+                    </label>
+
+
+                    <label class="skill-option">
+                        <input
+                            type="checkbox"
+                            name="technical_skills"
+                            value="React"
+                        >
+                        React
+                    </label>
+
+
+                    <
