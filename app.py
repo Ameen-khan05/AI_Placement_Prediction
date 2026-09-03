@@ -1,60 +1,51 @@
 from flask import Flask, render_template, request
 import joblib
 
-
 app = Flask(__name__)
 
-
-# -----------------------------------------
+# =========================================================
 # LOAD MODEL
-# -----------------------------------------
+# =========================================================
 
 model_data = joblib.load("model.pkl")
-
 model = model_data["model"]
 
 
-# -----------------------------------------
+# =========================================================
 # SKILL WEIGHTS
-# -----------------------------------------
+# =========================================================
 
 SKILL_WEIGHTS = {
-
     "Python": 10,
     "Java": 9,
     "C": 7,
     "C++": 8,
-
     "HTML": 5,
     "CSS": 5,
     "JavaScript": 8,
-
     "SQL": 8,
     "React": 9,
-
     "Django": 9,
     "Flask": 8,
-
     "Machine Learning": 10,
     "Data Science": 10
 }
 
 
-# -----------------------------------------
+# =========================================================
 # CALCULATE TECHNICAL SKILLS SCORE
-# -----------------------------------------
+# =========================================================
 
 def calculate_skills_score(selected_skills, custom_skills):
 
     score = 0
 
-    # Score from predefined skills
+    # Predefined skills
     for skill in selected_skills:
-
         if skill in SKILL_WEIGHTS:
             score += SKILL_WEIGHTS[skill]
 
-    # Score from custom skills
+    # Custom skills
     if custom_skills:
 
         custom_list = [
@@ -63,41 +54,36 @@ def calculate_skills_score(selected_skills, custom_skills):
             if skill.strip()
         ]
 
-        # Each custom skill gives 5 points
+        # 5 points for each custom skill
         score += len(custom_list) * 5
 
-    # Maximum score
+    # Maximum score = 100
     score = min(score, 100)
 
     return score
 
 
-# -----------------------------------------
+# =========================================================
 # HOME PAGE
-# -----------------------------------------
+# =========================================================
 
 @app.route("/")
 def home():
-
     return render_template("index.html")
 
-@app.route("/assessment")
-def assessment():
-    return render_template("assessment.html")
 
-
-# -----------------------------------------
+# =========================================================
 # PREDICT
-# -----------------------------------------
+# =========================================================
 
 @app.route("/predict", methods=["POST"])
 def predict():
 
     try:
 
-        # ---------------------------------
+        # =================================================
         # GET STUDENT DETAILS
-        # ---------------------------------
+        # =================================================
 
         cgpa = float(request.form["cgpa"])
 
@@ -114,18 +100,29 @@ def predict():
         )
 
 
-        # ---------------------------------
-        # GET MULTIPLE SKILLS
-        # ---------------------------------
+        # =================================================
+        # GET CAREER ROLE
+        # =================================================
+        # Student selects this in the assessment page.
+
+        career_role = request.form.get(
+            "career_role",
+            "Not Selected"
+        )
+
+
+        # =================================================
+        # GET TECHNICAL SKILLS
+        # =================================================
 
         selected_skills = request.form.getlist(
             "technical_skills"
         )
 
 
-        # ---------------------------------
+        # =================================================
         # GET CUSTOM SKILLS
-        # ---------------------------------
+        # =================================================
 
         custom_skills = request.form.get(
             "custom_skills",
@@ -133,9 +130,9 @@ def predict():
         )
 
 
-        # ---------------------------------
+        # =================================================
         # CALCULATE SKILLS SCORE
-        # ---------------------------------
+        # =================================================
 
         skills_score = calculate_skills_score(
             selected_skills,
@@ -143,9 +140,17 @@ def predict():
         )
 
 
-        # ---------------------------------
+        # =================================================
         # MODEL INPUT
-        # ---------------------------------
+        # =================================================
+        # Attendance is completely removed.
+        #
+        # Model inputs:
+        # CGPA
+        # Internships
+        # Projects
+        # Aptitude Score
+        # Technical Skills Score
 
         input_data = [[
             cgpa,
@@ -156,9 +161,9 @@ def predict():
         ]]
 
 
-        # ---------------------------------
+        # =================================================
         # PREDICTION
-        # ---------------------------------
+        # =================================================
 
         prediction = model.predict(input_data)[0]
 
@@ -167,76 +172,59 @@ def predict():
         )[0]
 
 
-        # Probability of placement
+        # =================================================
+        # PLACEMENT PROBABILITY
+        # =================================================
+
         placed_probability = probabilities[1] * 100
 
 
-        # ---------------------------------
+        # =================================================
         # RESULT
-        # ---------------------------------
+        # =================================================
 
         if prediction == 1:
-
             result = "PLACED"
-
         else:
-
             result = "NOT PLACED"
 
 
-        # ---------------------------------
-        # CAREER ROLE
-        # ---------------------------------
-
-        career_role = "Software Developer"
-
-        if (
-            "Machine Learning" in selected_skills
-            or "Data Science" in selected_skills
-        ):
-            career_role = "AI / Data Science"
-
-        elif "React" in selected_skills:
-
-            career_role = "Frontend Developer"
-
-        elif (
-            "Django" in selected_skills
-            or "Flask" in selected_skills
-        ):
-            career_role = "Python Backend Developer"
-
-
-        # ---------------------------------
+        # =================================================
         # STRENGTHS
-        # ---------------------------------
+        # =================================================
 
         strengths = []
+
 
         if cgpa >= 7.5:
             strengths.append(
                 "Good academic performance"
             )
 
+
         if internships >= 1:
             strengths.append(
                 "Internship experience is valuable"
             )
+
 
         if projects >= 2:
             strengths.append(
                 "Good project experience"
             )
 
+
         if aptitude_score >= 70:
             strengths.append(
                 "Good aptitude preparation"
             )
 
+
         if skills_score >= 60:
             strengths.append(
                 "Strong technical skill profile"
             )
+
 
         if not strengths:
             strengths.append(
@@ -244,36 +232,42 @@ def predict():
             )
 
 
-        # ---------------------------------
+        # =================================================
         # AREAS TO IMPROVE
-        # ---------------------------------
+        # =================================================
 
         improvements = []
+
 
         if cgpa < 7.5:
             improvements.append(
                 "Improve academic performance"
             )
 
+
         if internships == 0:
             improvements.append(
                 "Gain internship experience"
             )
+
 
         if projects < 2:
             improvements.append(
                 "Build 2 or more practical projects"
             )
 
+
         if aptitude_score < 70:
             improvements.append(
                 "Practice aptitude and logical reasoning"
             )
 
+
         if skills_score < 60:
             improvements.append(
                 "Develop more technical skills"
             )
+
 
         if not improvements:
             improvements.append(
@@ -281,39 +275,44 @@ def predict():
             )
 
 
-        # ---------------------------------
+        # =================================================
         # PRACTICE RECOMMENDATIONS
-        # ---------------------------------
+        # =================================================
 
         recommendations = []
+
 
         if skills_score < 60:
             recommendations.append(
                 "Learn one additional programming technology"
             )
 
+
         if projects < 2:
             recommendations.append(
                 "Build 2 or more practical projects"
             )
+
 
         if internships == 0:
             recommendations.append(
                 "Look for internship opportunities"
             )
 
+
         recommendations.append(
             "Practice common interview questions"
         )
+
 
         recommendations.append(
             "Improve problem-solving and Data Structures"
         )
 
 
-        # ---------------------------------
-        # SEND RESULT TO PAGE
-        # ---------------------------------
+        # =================================================
+        # SEND DATA TO RESULT PAGE
+        # =================================================
 
         return render_template(
             "result.html",
@@ -353,14 +352,27 @@ def predict():
 
         return f"""
         <h2>Error</h2>
+
         <p>{str(e)}</p>
-        <a href="/">Go Back</a>
+
+        <a href="/assessment">
+            Go Back
+        </a>
         """
 
 
-# -----------------------------------------
+# =========================================================
+# ASSESSMENT PAGE
+# =========================================================
+
+@app.route("/assessment")
+def assessment():
+    return render_template("assessment.html")
+
+
+# =========================================================
 # RUN APPLICATION
-# -----------------------------------------
+# =========================================================
 
 if __name__ == "__main__":
 
