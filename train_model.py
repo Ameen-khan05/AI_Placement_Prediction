@@ -4,27 +4,40 @@ import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 
 
-# -----------------------------------------
-# CREATE TRAINING DATA
-# -----------------------------------------
+# =========================================
+# AI PLACEMENT MODEL TRAINING
+# =========================================
+
+print("=" * 50)
+print("       AI PLACEMENT MODEL TRAINING")
+print("=" * 50)
+
+
+# =========================================
+# CREATE DATASET
+# =========================================
 
 np.random.seed(42)
 
-n = 2000
+n = 3000
 
 cgpa = np.random.uniform(5.0, 10.0, n)
+
 internships = np.random.randint(0, 4, n)
+
 projects = np.random.randint(0, 5, n)
+
 aptitude_score = np.random.uniform(30, 100, n)
+
 skills_score = np.random.uniform(10, 100, n)
 
 
-# -----------------------------------------
-# PLACEMENT SCORE
-# -----------------------------------------
+# =========================================
+# CALCULATE PLACEMENT SCORE
+# =========================================
 
 placement_score = (
     cgpa * 10
@@ -35,89 +48,199 @@ placement_score = (
 )
 
 
-# Students above median are considered placed
+# =========================================
+# CREATE BALANCED TARGET
+# =========================================
+
 threshold = np.median(placement_score)
 
 placed = (placement_score >= threshold).astype(int)
 
 
-# -----------------------------------------
-# DATAFRAME
-# -----------------------------------------
+# =========================================
+# CREATE DATAFRAME
+# =========================================
 
 df = pd.DataFrame({
+
     "cgpa": cgpa,
+
     "internships": internships,
+
     "projects": projects,
+
     "aptitude_score": aptitude_score,
+
     "skills_score": skills_score,
+
     "placed": placed
+
 })
 
 
-# -----------------------------------------
-# TRAIN MODEL
-# -----------------------------------------
+# =========================================
+# FEATURES
+# =========================================
 
-X = df[
-    [
-        "cgpa",
-        "internships",
-        "projects",
-        "aptitude_score",
-        "skills_score"
-    ]
+features = [
+
+    "cgpa",
+
+    "internships",
+
+    "projects",
+
+    "aptitude_score",
+
+    "skills_score"
+
 ]
+
+
+X = df[features]
 
 y = df["placed"]
 
 
+# =========================================
+# TRAIN / TEST SPLIT
+# =========================================
+
 X_train, X_test, y_train, y_test = train_test_split(
+
     X,
     y,
+
     test_size=0.20,
-    random_state=42
+
+    random_state=42,
+
+    stratify=y
+
 )
 
+
+# =========================================
+# TRAIN RANDOM FOREST
+# =========================================
 
 model = RandomForestClassifier(
-    n_estimators=200,
+
+    n_estimators=300,
+
+    max_depth=8,
+
+    min_samples_split=5,
+
+    min_samples_leaf=2,
+
     random_state=42
+
 )
+
 
 model.fit(X_train, y_train)
 
 
-# -----------------------------------------
-# CHECK ACCURACY
-# -----------------------------------------
+# =========================================
+# TEST MODEL
+# =========================================
 
 predictions = model.predict(X_test)
 
-accuracy = accuracy_score(y_test, predictions)
+accuracy = accuracy_score(
 
-print("--------------------------------")
-print("MODEL TRAINING COMPLETE")
-print("--------------------------------")
-print(f"Accuracy: {accuracy * 100:.2f}%")
-print("--------------------------------")
+    y_test,
+
+    predictions
+
+)
 
 
-# -----------------------------------------
+print()
+
+print("Training records :", len(X_train))
+
+print("Testing records  :", len(X_test))
+
+print()
+
+print(
+
+    f"Model Accuracy: {accuracy * 100:.2f}%"
+
+)
+
+print()
+
+print("Classification Report:")
+
+print(
+
+    classification_report(
+
+        y_test,
+
+        predictions
+
+    )
+
+)
+
+
+# =========================================
+# CHECK CLASS BALANCE
+# =========================================
+
+print()
+
+print("Class Distribution:")
+
+print(
+
+    df["placed"]
+
+    .value_counts()
+
+    .rename({
+
+        0: "NOT PLACED",
+
+        1: "PLACED"
+
+    })
+
+)
+
+
+# =========================================
 # SAVE MODEL
-# -----------------------------------------
+# =========================================
 
 model_data = {
+
     "model": model,
-    "features": [
-        "cgpa",
-        "internships",
-        "projects",
-        "aptitude_score",
-        "skills_score"
-    ]
+
+    "features": features
+
 }
 
-joblib.dump(model_data, "model.pkl")
 
-print("Model saved as model.pkl")
+joblib.dump(
+
+    model_data,
+
+    "model.pkl"
+
+)
+
+
+print()
+
+print("=" * 50)
+
+print("Model successfully saved as:")
+
+print("model.pkl")
+
+print("=" * 50)

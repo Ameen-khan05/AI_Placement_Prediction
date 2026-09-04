@@ -4,15 +4,14 @@ import joblib
 app = Flask(__name__)
 
 # =========================================================
-# LOAD MODEL
+# LOAD TRAINED MODEL
 # =========================================================
 
 model_data = joblib.load("model.pkl")
 model = model_data["model"]
 
-
 # =========================================================
-# SKILL WEIGHTS
+# TECHNICAL SKILL WEIGHTS
 # =========================================================
 
 SKILL_WEIGHTS = {
@@ -40,12 +39,12 @@ def calculate_skills_score(selected_skills, custom_skills):
 
     score = 0
 
-    # Predefined skills
+    # Score for selected skills
     for skill in selected_skills:
         if skill in SKILL_WEIGHTS:
             score += SKILL_WEIGHTS[skill]
 
-    # Custom skills
+    # Score for manually entered skills
     if custom_skills:
 
         custom_list = [
@@ -54,7 +53,7 @@ def calculate_skills_score(selected_skills, custom_skills):
             if skill.strip()
         ]
 
-        # 5 points for each custom skill
+        # 5 points for every custom skill
         score += len(custom_list) * 5
 
     # Maximum score = 100
@@ -73,7 +72,16 @@ def home():
 
 
 # =========================================================
-# PREDICT
+# ASSESSMENT PAGE
+# =========================================================
+
+@app.route("/assessment")
+def assessment():
+    return render_template("assessment.html")
+
+
+# =========================================================
+# PREDICTION
 # =========================================================
 
 @app.route("/predict", methods=["POST"])
@@ -99,17 +107,14 @@ def predict():
             request.form["aptitude_score"]
         )
 
-
         # =================================================
-        # GET CAREER ROLE
+        # GET CAREER ROLE SELECTED BY STUDENT
         # =================================================
-        # Student selects this in the assessment page.
 
         career_role = request.form.get(
             "career_role",
             "Not Selected"
         )
-
 
         # =================================================
         # GET TECHNICAL SKILLS
@@ -118,7 +123,6 @@ def predict():
         selected_skills = request.form.getlist(
             "technical_skills"
         )
-
 
         # =================================================
         # GET CUSTOM SKILLS
@@ -129,7 +133,6 @@ def predict():
             ""
         )
 
-
         # =================================================
         # CALCULATE SKILLS SCORE
         # =================================================
@@ -139,18 +142,18 @@ def predict():
             custom_skills
         )
 
-
         # =================================================
         # MODEL INPUT
-        # =================================================
-        # Attendance is completely removed.
         #
-        # Model inputs:
-        # CGPA
-        # Internships
-        # Projects
-        # Aptitude Score
-        # Technical Skills Score
+        # IMPORTANT:
+        # The model uses ONLY these 5 features.
+        #
+        # cgpa
+        # internships
+        # projects
+        # aptitude_score
+        # skills_score
+        # =================================================
 
         input_data = [[
             cgpa,
@@ -160,9 +163,8 @@ def predict():
             skills_score
         ]]
 
-
         # =================================================
-        # PREDICTION
+        # MACHINE LEARNING PREDICTION
         # =================================================
 
         prediction = model.predict(input_data)[0]
@@ -171,23 +173,25 @@ def predict():
             input_data
         )[0]
 
+        # Find probability belonging to class 1
+        placed_probability = 0
+
+        for index, class_value in enumerate(model.classes_):
+
+            if class_value == 1:
+                placed_probability = probabilities[index] * 100
 
         # =================================================
-        # PLACEMENT PROBABILITY
-        # =================================================
-
-        placed_probability = probabilities[1] * 100
-
-
-        # =================================================
-        # RESULT
+        # PLACEMENT RESULT
         # =================================================
 
         if prediction == 1:
-            result = "PLACED"
-        else:
-            result = "NOT PLACED"
 
+            result = "PLACED"
+
+        else:
+
+            result = "NOT PLACED"
 
         # =================================================
         # STRENGTHS
@@ -195,42 +199,41 @@ def predict():
 
         strengths = []
 
-
         if cgpa >= 7.5:
+
             strengths.append(
                 "Good academic performance"
             )
 
-
         if internships >= 1:
-            strengths.append(
-                "Internship experience is valuable"
-            )
 
+            strengths.append(
+                "Internship experience"
+            )
 
         if projects >= 2:
+
             strengths.append(
-                "Good project experience"
+                "Good practical project experience"
             )
 
-
         if aptitude_score >= 70:
+
             strengths.append(
                 "Good aptitude preparation"
             )
 
-
         if skills_score >= 60:
+
             strengths.append(
                 "Strong technical skill profile"
             )
 
-
         if not strengths:
-            strengths.append(
-                "Good opportunity to improve your profile"
-            )
 
+            strengths.append(
+                "You have a good opportunity to improve your profile"
+            )
 
         # =================================================
         # AREAS TO IMPROVE
@@ -238,77 +241,115 @@ def predict():
 
         improvements = []
 
-
         if cgpa < 7.5:
+
             improvements.append(
                 "Improve academic performance"
             )
 
-
         if internships == 0:
+
             improvements.append(
                 "Gain internship experience"
             )
 
-
         if projects < 2:
+
             improvements.append(
-                "Build 2 or more practical projects"
+                "Build more practical projects"
             )
 
-
         if aptitude_score < 70:
+
             improvements.append(
                 "Practice aptitude and logical reasoning"
             )
 
-
         if skills_score < 60:
+
             improvements.append(
                 "Develop more technical skills"
             )
 
-
         if not improvements:
+
             improvements.append(
                 "Continue improving your technical knowledge"
             )
 
+        # =================================================
+        # SKILLS TO PRACTICE
+        # =================================================
+
+        skills_to_practice = []
+
+        # If student has not selected Python
+        if "Python" not in selected_skills:
+
+            skills_to_practice.append("Python")
+
+        # SQL is useful for most software/data roles
+        if "SQL" not in selected_skills:
+
+            skills_to_practice.append("SQL")
+
+        # JavaScript
+        if "JavaScript" not in selected_skills:
+
+            skills_to_practice.append("JavaScript")
+
+        # Data Structures
+        skills_to_practice.append(
+            "Data Structures & Algorithms"
+        )
+
+        # Problem solving
+        skills_to_practice.append(
+            "Problem Solving"
+        )
+
+        # Interview
+        skills_to_practice.append(
+            "Technical Interview Preparation"
+        )
 
         # =================================================
-        # PRACTICE RECOMMENDATIONS
+        # RECOMMENDATIONS
         # =================================================
 
         recommendations = []
 
-
-        if skills_score < 60:
-            recommendations.append(
-                "Learn one additional programming technology"
-            )
-
-
         if projects < 2:
-            recommendations.append(
-                "Build 2 or more practical projects"
-            )
 
+            recommendations.append(
+                "Build at least 2 practical projects"
+            )
 
         if internships == 0:
+
             recommendations.append(
                 "Look for internship opportunities"
             )
 
+        if aptitude_score < 70:
+
+            recommendations.append(
+                "Practice aptitude and logical reasoning regularly"
+            )
+
+        if skills_score < 60:
+
+            recommendations.append(
+                "Learn additional technical skills"
+            )
 
         recommendations.append(
-            "Practice common interview questions"
+            "Practice common technical interview questions"
         )
-
 
         recommendations.append(
-            "Improve problem-solving and Data Structures"
+            "Improve problem-solving skills"
         )
-
 
         # =================================================
         # SEND DATA TO RESULT PAGE
@@ -338,36 +379,74 @@ def predict():
 
             custom_skills=custom_skills,
 
+            # Student-selected career role
             career_role=career_role,
 
             strengths=strengths,
 
             improvements=improvements,
 
+            skills_to_practice=skills_to_practice,
+
             recommendations=recommendations
         )
-
 
     except Exception as e:
 
         return f"""
-        <h2>Error</h2>
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Error</title>
+            <style>
+                body {{
+                    font-family: Arial;
+                    background: #f5f7fb;
+                    padding: 50px;
+                }}
 
-        <p>{str(e)}</p>
+                .error {{
+                    background: white;
+                    padding: 30px;
+                    border-radius: 15px;
+                    max-width: 700px;
+                    margin: auto;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                }}
 
-        <a href="/assessment">
-            Go Back
-        </a>
+                h2 {{
+                    color: #dc2626;
+                }}
+
+                a {{
+                    display: inline-block;
+                    margin-top: 20px;
+                    padding: 12px 20px;
+                    background: #2563eb;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 8px;
+                }}
+            </style>
+        </head>
+
+        <body>
+
+            <div class="error">
+
+                <h2>Something went wrong</h2>
+
+                <p>{str(e)}</p>
+
+                <a href="/assessment">
+                    Go Back to Assessment
+                </a>
+
+            </div>
+
+        </body>
+        </html>
         """
-
-
-# =========================================================
-# ASSESSMENT PAGE
-# =========================================================
-
-@app.route("/assessment")
-def assessment():
-    return render_template("assessment.html")
 
 
 # =========================================================
