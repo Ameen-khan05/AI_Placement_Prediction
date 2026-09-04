@@ -6,7 +6,6 @@ An AI/ML-based web application that predicts a student's placement status based 
 The system also provides personalized improvement suggestions and practice resources with direct links to useful websites.
 
 ---
----
 
 ## 🌐 Live Deployment
 
