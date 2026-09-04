@@ -2,6 +2,7 @@
 
 An AI/ML-based web application that predicts a student's placement status using academic performance, technical skills, internships, projects, and aptitude score. The system also provides placement probability, performance analysis, areas for improvement, practice recommendations, and career guidance.
 
+<<<<<<< HEAD
 ---
 
 ## 🌐 Live Deployment
@@ -57,6 +58,56 @@ Attendance
 
 Skills Score
 
+=======
+My live website link:https://ai-placement-prediction-65hm.onrender.com/
+
+📌 Project Overview
+
+Students often find it difficult to understand their placement readiness and identify the areas they need to improve.
+
+This project uses a Machine Learning model to analyze important student-related factors and predict whether a student is likely to be placed.
+
+Instead of only providing a PLACED / NOT PLACED prediction, the system also analyzes the student's profile and provides personalized suggestions for improving technical skills, aptitude, projects, internships, and interview preparation.
+
+🎯 Objectives
+
+Predict student placement status using Machine Learning.
+
+Provide an estimated placement probability.
+
+Analyze the student's strengths and weak areas.
+
+Suggest skills and topics that should be practiced.
+
+Provide career-specific preparation recommendations.
+
+Help students understand their placement readiness.
+
+
+🚀 Features
+
+🔮 Placement Prediction
+
+The system predicts:
+
+PLACED
+
+NOT PLACED
+
+
+along with the estimated placement probability.
+
+📊 Performance Analysis
+
+The system analyzes:
+
+CGPA
+
+Attendance
+
+Skills Score
+
+>>>>>>> Changes
 Number of Internships
 
 Number of Projects
