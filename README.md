@@ -6,7 +6,7 @@ The system is designed to help students understand their placement readiness, id
 
 ## 🌐 Live Deployment
 
-Try the live application: **[AI Placement Prediction](https://ai-placement-prediction-65hm.onrender.com/
+Try the live application: **[Student Placement Prediction](https://ai-placement-prediction-65hm.onrender.com/
 )**
 
 📌 Project Overview
